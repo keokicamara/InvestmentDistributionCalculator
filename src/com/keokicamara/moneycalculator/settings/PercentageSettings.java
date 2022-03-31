@@ -1,26 +1,39 @@
 package com.keokicamara.moneycalculator.settings;
 
+import com.keokicamara.moneycalculator.CalculatorApplication;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class PercentageSettings {
 
-    /*
-    public static final double STOCK_PERCENTAGE = Double.parseDouble(SettingsFile.properties.getProperty("STOCK_PERCENTAGE"));
-    public static final double CRYPTO_PERCENTAGE = Double.parseDouble(SettingsFile.properties.getProperty("CRYPTO_PERCENTAGE"));
+    public static String STOCK_PERCENTAGE;
+    public static String CRYPTO_PERCENTAGE;
 
-    public static final double ETF_PERCENTAGE = Double.parseDouble(SettingsFile.properties.getProperty("ETF_PERCENTAGE"));
-    public static final double PICKS_PERCENTAGE = Double.parseDouble(SettingsFile.properties.getProperty("PICKS_PERCENTAGE"));
+    public static String ETF_PERCENTAGE;
+    public static String PICKS_PERCENTAGE;
 
-    public static final double BITCOIN_PERCENTAGE = Double.parseDouble(SettingsFile.properties.getProperty("BITCOIN_PERCENTAGE"));
-    public static final double ETHEREUM_PERCENTAGE = Double.parseDouble(SettingsFile.properties.getProperty("ETHEREUM_PERCENTAGE"));
-    public static final double ALTCOIN_PERCENTAGE = Double.parseDouble(SettingsFile.properties.getProperty("ALTCOIN_PERCENTAGE"));
-     */
-    public static final double STOCK_PERCENTAGE = 0.7;
-    public static final double CRYPTO_PERCENTAGE = 0.3;
+    public static String BITCOIN_PERCENTAGE;
+    public static String ETHEREUM_PERCENTAGE;
+    public static String ALTCOIN_PERCENTAGE;
 
-    public static final double ETF_PERCENTAGE = 0.5;
-    public static final double PICKS_PERCENTAGE = 0.5;
+    public static void loadPropertiesValues() {
+        try {
+            SettingsFile.getInstance().properties.load(SettingsFile.fileReader);
 
-    public static final double BITCOIN_PERCENTAGE = 0.6;
-    public static final double ETHEREUM_PERCENTAGE = 0.3;
-    public static final double ALTCOIN_PERCENTAGE = 0.1;
+            STOCK_PERCENTAGE = SettingsFile.getInstance().properties.getProperty("STOCK_PERCENTAGE");
+            CRYPTO_PERCENTAGE = SettingsFile.getInstance().properties.getProperty("CRYPTO_PERCENTAGE");
+
+            ETF_PERCENTAGE = SettingsFile.getInstance().properties.getProperty("ETF_PERCENTAGE");
+            PICKS_PERCENTAGE = SettingsFile.getInstance().properties.getProperty("PICKS_PERCENTAGE");
+
+            BITCOIN_PERCENTAGE = SettingsFile.getInstance().properties.getProperty("BITCOIN_PERCENTAGE");
+            ETHEREUM_PERCENTAGE = SettingsFile.getInstance().properties.getProperty("ETHEREUM_PERCENTAGE");
+            ALTCOIN_PERCENTAGE = SettingsFile.getInstance().properties.getProperty("ALTCOIN_PERCENTAGE");
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
 
 }
