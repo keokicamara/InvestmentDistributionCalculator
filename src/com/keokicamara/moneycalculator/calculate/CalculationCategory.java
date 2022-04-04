@@ -2,7 +2,9 @@ package com.keokicamara.moneycalculator.calculate;
 
 import com.keokicamara.moneycalculator.CalculatorApplication;
 
-public class CalculationCategory {
+import java.io.Serializable;
+
+public class CalculationCategory implements Serializable {
 
     private final String name;
     private final String percentage;
@@ -15,6 +17,8 @@ public class CalculationCategory {
     public double getPercentage() {
         return Double.parseDouble(percentage);
     }
+
+    public String getPercentageString() { return percentage; }
 
     public String getFormattedPercentage() {
         return String.format("%,.2f", Double.parseDouble(percentage) * 100) + "%";
@@ -36,4 +40,7 @@ public class CalculationCategory {
         System.out.println(getFormattedName() + getFormattedTotal());
     }
 
+    public String getName() {
+        return name;
+    }
 }

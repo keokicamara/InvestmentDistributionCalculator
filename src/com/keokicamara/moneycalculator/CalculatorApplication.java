@@ -1,41 +1,25 @@
 package com.keokicamara.moneycalculator;
 
 import com.keokicamara.moneycalculator.calculate.CalculationCategory;
-import com.keokicamara.moneycalculator.calculate.CalculationSubcategory;
-import com.keokicamara.moneycalculator.settings.PercentageSettings;
-import com.keokicamara.moneycalculator.settings.SettingsFile;
+import com.keokicamara.moneycalculator.commands.CreateCategoryCommand;
+import com.keokicamara.moneycalculator.settings.SettingsHandler;
 
+import java.io.File;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class CalculatorApplication {
 
-    // TODO make config savable get to work on command config interface :)
+    // TODO work on app flow, implement subcategory creation, CLEAN THIS SHIT UP BRO
 
-    private static final Scanner scanner = new Scanner(System.in);
+    private static final SettingsHandler settingsHandler = new SettingsHandler();
+    public static final File localStorage = new File("/local/");
+
+    public static final Scanner scanner = new Scanner(System.in);
     public static double inputTotal;
 
-    private static CalculationCategory stocks;
-    private static CalculationSubcategory etf;
-    private static CalculationSubcategory picks;
-
-    private static CalculationCategory crypto;
-    private static CalculationSubcategory bitcoin;
-    private static CalculationSubcategory ethereum;
-    private static CalculationSubcategory altcoins;
-
     public static void main(String[] args) {
-        SettingsFile.getInstance().setupSettingsFile();
-        PercentageSettings.loadPropertiesValues();
-
-        stocks = new CalculationCategory("Stocks", PercentageSettings.STOCK_PERCENTAGE);
-        etf = new CalculationSubcategory("ETF", PercentageSettings.ETF_PERCENTAGE, stocks);
-        picks = new CalculationSubcategory("Picks", PercentageSettings.PICKS_PERCENTAGE, stocks);
-
-        crypto = new CalculationCategory("Crypto", PercentageSettings.CRYPTO_PERCENTAGE);
-        bitcoin = new CalculationSubcategory("BTC", PercentageSettings.BITCOIN_PERCENTAGE, crypto);
-        ethereum = new CalculationSubcategory("ETH", PercentageSettings.ETHEREUM_PERCENTAGE, crypto);
-        altcoins = new CalculationSubcategory("ALT", PercentageSettings.ALTCOIN_PERCENTAGE, crypto);
-
+        /*
         printDistribution();
         promptTotal();
         takeTotalInput();
@@ -43,19 +27,21 @@ public class CalculatorApplication {
         waitForExitCommand();
 
         SettingsFile.getInstance().closeFileReader();
+        */
+
+
+        promptLoadSettings();
+        printDistribution();
+
     }
 
     private static void printDistribution() {
         System.out.println("""
                 You are currently distributing your money as follows:
                 """);
-        stocks.printPercentageDistribution();
-        etf.printPercentageDistribution();
-        picks.printPercentageDistribution();
-        crypto.printPercentageDistribution();
-        bitcoin.printPercentageDistribution();
-        ethereum.printPercentageDistribution();
-        altcoins.printPercentageDistribution();
+        for (CalculationCategory calculationCategory : settingsHandler.deserializedObjects) {
+            calculationCategory.printPercentageDistribution();
+        }
         System.out.println(" ");
     }
 
@@ -82,13 +68,7 @@ public class CalculatorApplication {
                 your money as follows:
                 
                 """);
-        stocks.printFinalDistribution();
-        etf.printFinalDistribution();
-        picks.printFinalDistribution();
-        crypto.printFinalDistribution();
-        bitcoin.printFinalDistribution();
-        ethereum.printFinalDistribution();
-        altcoins.printFinalDistribution();
+
         System.out.println("---------------------------------------------------------------------------");
         System.out.println(" ");
     }
@@ -100,6 +80,35 @@ public class CalculatorApplication {
                 break;
             }
         }
+    }
+
+    private static void promptLoadSettings() {
+        System.out.println("Do you have a configuration you want to load? <y/n>");
+        String scannerInput = scanner.nextLine();
+        if (Objects.equals(scannerInput, "y")) {
+            settingsHandler.setupSettings(localStorage);
+        } else if (Objects.equals(scannerInput, "n")) {
+            settingsHandler.cleanSettingsDirectory();
+            promptCreateSettings();
+        } else {
+            repromptLoadSettings();
+        }
+    }
+
+    private static void repromptLoadSettings() {
+        System.out.println("Not valid input! Please type 'y' for yes or 'n' for no.");
+        promptLoadSettings();
+    }
+
+    private static void promptCreateSettings() {
+        System.out.println("Hmmm.... we didn't find any settings to load. Type 'create' to get started!");
+        CreateCategoryCommand createCategoryCommand = new CreateCategoryCommand("create");
+        createCategoryCommand.run();
+    }
+
+    private static void repromptCreateSettings() {
+        System.out.println("Not valid input! Please type 'create'.");
+        promptCreateSettings();
     }
 
 }

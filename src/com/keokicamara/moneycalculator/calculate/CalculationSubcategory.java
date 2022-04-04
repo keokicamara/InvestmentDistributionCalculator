@@ -2,9 +2,12 @@ package com.keokicamara.moneycalculator.calculate;
 
 import com.keokicamara.moneycalculator.CalculatorApplication;
 
-public class CalculationSubcategory {
+import java.io.*;
+import java.util.Locale;
 
-    private final String name;
+public class CalculationSubcategory implements Serializable {
+
+    private String name;
     private final String percentage;
     private final CalculationCategory calculationCategory;
 
@@ -32,6 +35,10 @@ public class CalculationSubcategory {
 
     public void printFinalDistribution() {
         System.out.println(getFormattedName() + getFormattedTotal());
+    }
+
+    public String getName() {
+        return name;
     }
 
 }
